@@ -36,12 +36,12 @@ func ValidateAuth(c *gin.Context) {
 
 	user, err := queries.GetUserByUsername(ctx, reqUser.Username)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, "Error")
+		c.JSON(http.StatusUnauthorized, "Invalid credentials.")
 		return
 	}
 
 	if user.Password != reqUser.Password {
-		c.JSON(http.StatusUnauthorized, "Unauthorized")
+		c.JSON(http.StatusUnauthorized, "Invalid credentials.")
 		return
 	}
 

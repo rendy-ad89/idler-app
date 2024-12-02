@@ -172,7 +172,7 @@ function Dashboard() {
                 ))}
               </div>
               <hr />
-              <div class="row justify-content-end">
+              <div className="row justify-content-end">
                 <button
                   onClick={saveHandler}
                   className="btn btn-md btn-primary me-2 col-1"

@@ -6,7 +6,7 @@ import axios from "axios";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [validation, setValidation] = useState();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -16,8 +16,23 @@ function Login() {
     }
   }, [navigate]);
 
+  const usernameHandler = (username) => {
+    setUsername(username);
+    setErrorMessage("");
+  };
+
+  const passwordHandler = (password) => {
+    setPassword(password);
+    setErrorMessage("");
+  };
+
   const loginHandler = async (e) => {
     e.preventDefault();
+
+    if (!username || !password) {
+      setErrorMessage("Username and password can't be empty.");
+      return;
+    }
 
     await axios
       .post("http://localhost:8080/auth", {
@@ -32,8 +47,7 @@ function Login() {
         navigate("/dashboard");
       })
       .catch((error) => {
-        console.log(error);
-        setValidation(error.response.data);
+        setErrorMessage(error.response.data);
       });
   };
 
@@ -49,39 +63,37 @@ function Login() {
             <div className="card-body">
               <h4 className="fw-bold text-center">Login</h4>
               <hr />
-              <form onSubmit={loginHandler}>
-                <div className="mb-3">
-                  <label className="form-label">Username</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                {validation && (
-                  <div className="alert alert-danger">{validation}</div>
-                )}
-                <div className="d-grid gap-2">
-                  <button type="submit" className="btn btn-primary">
-                    Submit
-                  </button>
-                </div>
-              </form>
-              <div className="d-grid gap-5">
+              <div className="mb-3">
+                <label className="form-label">Username</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={username}
+                  onChange={(e) => usernameHandler(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Password</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  value={password}
+                  onChange={(e) => passwordHandler(e.target.value)}
+                />
+              </div>
+              <div className="d-grid gap-2">
+                <button className="btn btn-primary" onClick={loginHandler}>
+                  Submit
+                </button>
+              </div>
+              <div className="d-grid gap-5 my-2">
                 <button className="btn" onClick={redirectToRegister}>
                   Create account
                 </button>
               </div>
+              {errorMessage && (
+                <div className="alert alert-danger">{errorMessage}</div>
+              )}
             </div>
           </div>
         </div>

@@ -5,12 +5,36 @@ import axios from "axios";
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [validation, setValidation] = useState([]);
+  const [usernameValidation, setUsernameValidation] = useState("");
+  const [passwordValidation, setPasswordValidation] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
+  const usernameHandler = (username) => {
+    setUsername(username);
+    setUsernameValidation("");
+    setErrorMessage("");
+  };
+
+  const passwordHandler = (password) => {
+    setPassword(password);
+    setPasswordValidation("");
+    setErrorMessage("");
+  };
+
   const registerHandler = async (e) => {
     e.preventDefault();
+
+    if (username.length < 5 || username.length > 20) {
+      setUsernameValidation("Username must be 5-20 characters.");
+    }
+    if (password.length < 5 || password.length > 20) {
+      setPasswordValidation("Password must be 5-20 characters.");
+    }
+    if (!username || !password) {
+      return;
+    }
 
     await axios
       .post("http://localhost:8080/users/register", {
@@ -18,10 +42,10 @@ function Register() {
         password,
       })
       .then(() => {
-        navigate("/");
+        redirectToLogin();
       })
       .catch((error) => {
-        setValidation(error.response);
+        setErrorMessage(error.response.data);
       });
   };
 
@@ -37,44 +61,43 @@ function Register() {
             <div className="card-body">
               <h4 className="fw-bold text-center">Register User</h4>
               <hr />
-              <form onSubmit={registerHandler}>
-                <div className="mb-3">
-                  <label className="form-label">Username</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </div>
-                {validation.name && (
-                  <div className="alert alert-danger">{validation.name[0]}</div>
-                )}
-                <div className="mb-3">
-                  <label className="form-label">Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                {validation.password && (
-                  <div className="alert alert-danger">
-                    {validation.password[0]}
-                  </div>
-                )}
-                <div className="d-grid gap-2">
-                  <button type="submit" className="btn btn-primary">
-                    Create
-                  </button>
-                </div>
-              </form>
-              <div className="d-grid gap-5">
+              <div className="mb-3">
+                <label className="form-label">Username</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={username}
+                  onChange={(e) => usernameHandler(e.target.value)}
+                />
+              </div>
+              {usernameValidation && (
+                <div className="alert alert-danger">{usernameValidation}</div>
+              )}
+              <div className="mb-3">
+                <label className="form-label">Password</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  value={password}
+                  onChange={(e) => passwordHandler(e.target.value)}
+                />
+              </div>
+              {passwordValidation && (
+                <div className="alert alert-danger">{passwordValidation}</div>
+              )}
+              <div className="d-grid gap-2">
+                <button className="btn btn-primary" onClick={registerHandler}>
+                  Create
+                </button>
+              </div>
+              <div className="d-grid gap-5 my-2">
                 <button className="btn" onClick={redirectToLogin}>
                   Login
                 </button>
               </div>
+              {errorMessage && (
+                <div className="alert alert-danger">{errorMessage}</div>
+              )}
             </div>
           </div>
         </div>
