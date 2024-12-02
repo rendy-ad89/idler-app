@@ -1,0 +1,12 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    database:
+      uri: postgresql://postgres:admin@localhost:5432/idler_app_db?sslmode=disable
+    queries: "query.sql"
+    schema: "schema.sql"
+    gen:
+      go:
+        package: "db"
+        out: "sqlc"
+        sql_package: "pgx/v5"
