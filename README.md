@@ -1,12 +1,22 @@
 # Idler App
-This is a mock web-app / idle game. The goal is to gather as many cash as we can by using machines to generate cash. This app is sort of inspired by https://steamcookieclicker.github.io
+This is a mock web-app / idle game. The goal is to gather as many cash as we can by using machines to generate cash.
+This app is sort of inspired by https://steamcookieclicker.github.io
 
 ## Tech Stack
 ### Backend
 - Golang with [Gin](https://gin-gonic.com)
 - [SQLC](https://sqlc.dev)
+- [PGX Driver](https://github.com/jackc/pgx)
+- [JWT](https://github.com/golang-jwt/jwt)
+
+Gin framework is used to create REST APIs while SQLC is used to generate code from SQL querries.
+
 ### Frontend
 - React
+- Bootstrap CSS
+  
+React is self explanatory here. I used bootstrap CSS as it saves a lot of time styling the frontend app.
+
 ### Database
 - PostgreSQL
 
