@@ -37,7 +37,7 @@ function Dashboard() {
 
     axios.defaults.headers.common["Authorization"] = accessToken;
     axios
-      .post("http://localhost:8080/users/machines")
+      .get("http://localhost:8080/users/machines")
       .then((response) => {
         setUsersMachines(response.data);
       })
@@ -103,7 +103,7 @@ function Dashboard() {
       });
     });
     await axios
-      .post("http://localhost:8080/users/machines/update", updatedUsersMachines)
+      .post("http://localhost:8080/users/machines", updatedUsersMachines)
       .then(handleOpen)
       .catch(() => {});
   };
